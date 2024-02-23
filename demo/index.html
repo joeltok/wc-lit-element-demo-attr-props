@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="demo"></div>
+
+  <script type="module">
+    import { html, render } from 'lit';
+    import '../my-web-component.js';
+
+    render(
+      html`
+        <my-web-component 
+          id="my-web-component-id"
+          stringattribute="i-am-a-kebab-cased-string"
+          numberattribute="123"
+          booleanattribute="booleanattribute"
+
+          jsonStringifiedObjectAttribute='{"o": "O"}'
+          jsonStringifiedArrayAttribute='["a", "b", 3]'
+
+          lowercaseattributecheck="i-am-selected"
+          lowercaseattributeCHECK="i-am-ignored"
+        ></my-web-component>
+      `,
+      // note that objectasprop does not work because we set `attribute: false`
+      document.querySelector('#demo')
+    );
+
+    const el = document.getElementById('my-web-component-id')
+    el.objectProperty = {'a': 'b'}
+    el.arrayProperty = [1, 2, 3]
+
+    el.addEventListener('update-non-reactive-count', (e) => {
+      console.log(`updated count: ${JSON.stringify(e.detail)}`)
+    })
+    el.addEventListener('update-reactive-count', (e) => {
+      console.log(`updated count: ${JSON.stringify(e.detail)}`)
+    })
+    el.nonReactiveCount = 10
+    el.reactiveCount = 10
+</script>
+</body>
+</html>
